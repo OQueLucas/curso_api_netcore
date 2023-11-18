@@ -6,14 +6,14 @@ API Application using DDD.
 
 ## 🔧 Recursos Utilizados
 
--   `.NET 6`
--   `C#`
--   `MVC`s
--   `MySQL`
--   `Migration`
+- `.NET 6`
+- `C#`
+- `MVC`s
+- `MySQL`
+- `Migration`
 
 ## Getting Started
 
 ```bash
-    dotnet ef database update
+  dotnet ef database update
 ```

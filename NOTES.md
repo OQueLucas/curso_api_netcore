@@ -1,9 +1,15 @@
 # NOTES
 
-Application - WebAPI - Responsável pelas rotas e serviços que será chamado na aplicação.
-Service - Comunicação com as classes do banco banco de dados
-Infrastructure - Responsável pela comunicação dos dados. Divida em 2; - Data: Que lida diretamente com o banco - CrossCutting:
-Domain - Passa os parâmetros da aplicação
+Application - WebAPI - Responsável pelas rotas e comunica com Service que será chamado.
+
+Service - Implementa a Infrastructure, faz a comunicação com o Data.
+
+Infrastructure - Responsável pela comunicação dos dados. Divida em 2:
+
+- Data: Lida diretamente com o banco;
+- CrossCutting:.
+
+Domain - Passa os parâmetros da aplicação.
 
 ## Commands starting
 
