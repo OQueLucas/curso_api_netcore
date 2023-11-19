@@ -2,14 +2,14 @@
 
 Application - WebAPI - Responsável pelas rotas e comunica com Service que será chamado.
 
-Service - Trabalha com a Domain e Implementa a Infrastructure, faz a comunicação com o Data.
+Service - Faz as validações do conteúdo e executa a regra de negócio. Trabalha com a Domain e Implementa a Infrastructure, faz a comunicação com o Data.
 
 Infrastructure - Responsável pela comunicação dos dados. Divida em 2:
 
 - Data: Possui o Entity Framework que vai comunicar diretamente com o banco fazendo o crud;
-- CrossCutting: Faz a Injeção de dependência para a Application, e deixar ela desconectada da camada de Data e chama o UserService.
+- CrossCutting: Faz a Injeção de dependência para a Application, e deixar ela desconectada da camada de Data e chama o UserService. Pode ser utilizada para chamar ouras APIs e concentra os métodos genéricos.
 
-Domain - Passa os parâmetros da aplicação.
+Domain - Onde se concentra as Interfaces, domínio e entidades, para as ouras camadas poderem fazer a injeção de dependência. Passa os parâmetros da aplicação.
 
 ## Commands starting
 
