@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Api.CrossCutting.DependencyInjection;
 using Api.Domain.Security;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -41,28 +43,51 @@ namespace application
                 .Configure(tokenConfigurations);
             services.AddSingleton(tokenConfigurations);
 
-            services.AddControllers();
-            services.AddSwaggerGen(c =>
+            services.AddAuthentication(authOptions =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Version = "v1",
-                    Title = "Curso de API com AspNetCore 3.1 - Na Prática",
-                    Description = "Arquitetura DDD",
-                    TermsOfService = new Uri("http://www.mfrinfo.com.br"),
-                    Contact = new OpenApiContact
-                    {
-                        Name = "Marcos Fabrício Rosa",
-                        Email = "mfr@mail.com",
-                        Url = new Uri("http://wwww.mfrinfo.com.br")
-                    },
-                    License = new OpenApiLicense
-                    {
-                        Name = "Termo de Licença de Uso",
-                        Url = new Uri("http://wwww.mfrinfo.com.br")
-                    }
-                });
+                authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(bearerOptions =>
+            {
+                var paramsValidation = bearerOptions.TokenValidationParameters;
+                paramsValidation.IssuerSigningKey = signingConfigurations.Key;
+                paramsValidation.ValidAudience = tokenConfigurations.Audience;
+                paramsValidation.ValidIssuer = tokenConfigurations.Issuer;
+                paramsValidation.ValidateIssuer = true;
+                paramsValidation.ValidateLifetime = true;
+                paramsValidation.ClockSkew = TimeSpan.Zero;
             });
+
+            services.AddAuthorization(auth =>
+            {
+                auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireAuthenticatedUser().Build());
+            });
+
+            services.AddSwaggerGen(c =>
+                {
+                    c.SwaggerDoc("v1", new OpenApiInfo
+                    {
+                        Version = "v1",
+                        Title = "Curso de API com AspNetCore 3.1 - Na Prática",
+                        Description = "Arquitetura DDD",
+                        TermsOfService = new Uri("http://www.mfrinfo.com.br"),
+                        Contact = new OpenApiContact
+                        {
+                            Name = "Marcos Fabrício Rosa",
+                            Email = "mfr@mail.com",
+                            Url = new Uri("http://wwww.mfrinfo.com.br")
+                        },
+                        License = new OpenApiLicense
+                        {
+                            Name = "Termo de Licença de Uso",
+                            Url = new Uri("http://wwww.mfrinfo.com.br")
+                        }
+                    });
+                });
+
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -91,3 +116,4 @@ namespace application
         }
     }
 }
+
